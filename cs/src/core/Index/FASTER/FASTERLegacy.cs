@@ -324,6 +324,11 @@ namespace FASTER.core
                 _fasterKV = fasterKV;
             }
 
+            public bool NoRmwUpdate()
+            {
+                return false;
+            }
+
             public void CheckpointCompletionCallback(string guid, CommitPoint commitPoint)
             {
                 _fasterKV._functions.CheckpointCompletionCallback(guid, commitPoint);

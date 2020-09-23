@@ -11,6 +11,11 @@
         void CheckpointCompletionCallback(string sessionId, CommitPoint commitPoint);
     }
 
+    internal interface IRmwOptions
+    {
+        bool NoRmwUpdate();
+    }
+
     /// <summary>
     /// Provides thread management and all callbacks.
     /// </summary>
@@ -19,7 +24,7 @@
     /// <typeparam name="Input"></typeparam>
     /// <typeparam name="Output"></typeparam>
     /// <typeparam name="Context"></typeparam>
-    internal interface IFasterSession<Key, Value, Input, Output, Context> : IFunctions<Key, Value, Input, Output, Context>, IFasterSession, IVariableLengthStruct<Value, Input>
+    internal interface IFasterSession<Key, Value, Input, Output, Context> : IFunctions<Key, Value, Input, Output, Context>, IFasterSession, IVariableLengthStruct<Value, Input>, IRmwOptions
     {
     }
 }

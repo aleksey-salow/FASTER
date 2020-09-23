@@ -26,6 +26,7 @@ namespace FASTER.core
     {
         private readonly FasterKV<Key, Value> fht;
 
+        internal readonly bool NoRmwUpdate = false ;
         internal readonly bool SupportAsync = false;
         internal readonly FasterKV<Key, Value>.FasterExecutionContext<Input, Output, Context> ctx;
         internal CommitPoint LatestCommitPoint;
@@ -40,12 +41,14 @@ namespace FASTER.core
             FasterKV<Key, Value>.FasterExecutionContext<Input, Output, Context> ctx,
             Functions functions,
             bool supportAsync,
+            bool noRmwUpdate,
             IVariableLengthStruct<Value, Input> variableLengthStruct)
         {
             this.fht = fht;
             this.ctx = ctx;
             this.functions = functions;
             SupportAsync = supportAsync;
+            NoRmwUpdate = noRmwUpdate;
             LatestCommitPoint = new CommitPoint { UntilSerialNo = -1, ExcludedSerialNos = null };
             FasterSession = new AsyncFasterSession(this);
 
@@ -556,6 +559,11 @@ namespace FASTER.core
             public AsyncFasterSession(ClientSession<Key, Value, Input, Output, Context, Functions> clientSession)
             {
                 _clientSession = clientSession;
+            }
+
+            public bool NoRmwUpdate()
+            {
+                return _clientSession.NoRmwUpdate;
             }
 
             public void CheckpointCompletionCallback(string guid, CommitPoint commitPoint)

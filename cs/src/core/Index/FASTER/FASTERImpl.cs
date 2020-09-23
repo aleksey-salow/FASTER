@@ -550,7 +550,7 @@ namespace FASTER.core
             // Optimization for the most common case
             if (sessionCtx.phase == Phase.REST && logicalAddress >= hlog.ReadOnlyAddress && !hlog.GetInfo(physicalAddress).Tombstone)
             {
-                if (fasterSession.InPlaceUpdater(ref key, ref input, ref hlog.GetValue(physicalAddress)))
+                if (fasterSession.NoRmwUpdate() || fasterSession.InPlaceUpdater(ref key, ref input, ref hlog.GetValue(physicalAddress)))
                 {
                     return OperationStatus.SUCCESS;
                 }
@@ -645,7 +645,7 @@ namespace FASTER.core
                     Debug.Assert(hlog.GetInfo(physicalAddress).Version == sessionCtx.version);
                 }
 
-                if (fasterSession.InPlaceUpdater(ref key, ref input, ref hlog.GetValue(physicalAddress)))
+                if (fasterSession.NoRmwUpdate() || fasterSession.InPlaceUpdater(ref key, ref input, ref hlog.GetValue(physicalAddress)))
                 {
                     status = OperationStatus.SUCCESS;
                     goto LatchRelease; // Release shared latch (if acquired)
@@ -703,6 +703,13 @@ namespace FASTER.core
         #region Create new record
         CreateNewRecord:
             {
+                var isNewRecord = (logicalAddress < hlog.BeginAddress) || (logicalAddress >= hlog.HeadAddress && hlog.GetInfo(physicalAddress).Tombstone) ;
+                if (fasterSession.NoRmwUpdate() && !isNewRecord)
+                {
+                    status = OperationStatus.SUCCESS;
+                    goto LatchRelease;
+                }
+
                 recordSize = (logicalAddress < hlog.BeginAddress) ?
                                 hlog.GetInitialRecordSize(ref key, ref input, fasterSession) :
                                 hlog.GetRecordSize(physicalAddress, ref input, fasterSession);
@@ -1400,6 +1407,9 @@ namespace FASTER.core
             }
             else
             {
+                if (fasterSession.NoRmwUpdate())
+                    return OperationStatus.SUCCESS;
+
                 physicalAddress = (long)request.record.GetValidPointer();
                 recordSize = hlog.GetRecordSize(physicalAddress, ref pendingContext.input, fasterSession);
             }
