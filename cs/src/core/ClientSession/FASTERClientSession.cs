@@ -42,7 +42,7 @@ namespace FASTER.core
             /// <param name="functions">Callback functions</param>
             /// <param name="sessionId">ID/name of session (auto-generated if not provided)</param>
             /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-            /// <param name="noRmwUpdate"></param>
+            /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
             /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
             /// <returns>Session instance</returns>
             public ClientSession<Key, Value, Input, Output, Context, Functions> NewSession<Functions>(Functions functions, string sessionId = null, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
@@ -59,7 +59,7 @@ namespace FASTER.core
             /// <param name="sessionId">ID/name of previous session to resume</param>
             /// <param name="commitPoint">Prior commit point of durability for session</param>
             /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-            /// <param name="noRmwUpdate"></param>
+            /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
             /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
             /// <returns>Session instance</returns>
             public ClientSession<Key, Value, Input, Output, Context, Functions> ResumeSession<Functions>(Functions functions, string sessionId, out CommitPoint commitPoint, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
@@ -73,7 +73,7 @@ namespace FASTER.core
             /// </summary>
             /// <param name="sessionId">ID/name of session (auto-generated if not provided)</param>
             /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-            /// <param name="noRmwUpdate"></param>
+            /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
             /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
             /// <returns>Session instance</returns>
             public ClientSession<Key, Value, Input, Output, Context, Functions> NewSession<Functions>(string sessionId = null, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
@@ -92,7 +92,7 @@ namespace FASTER.core
             /// <param name="sessionId">ID/name of previous session to resume</param>
             /// <param name="commitPoint">Prior commit point of durability for session</param>
             /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-            /// <param name="noRmwUpdate"></param>
+            /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
             /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
             /// <returns>Session instance</returns>
             public ClientSession<Key, Value, Input, Output, Context, Functions> ResumeSession<Functions>(string sessionId, out CommitPoint commitPoint, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
@@ -136,7 +136,7 @@ namespace FASTER.core
         /// <param name="functions">Callback functions</param>
         /// <param name="sessionId">ID/name of session (auto-generated if not provided)</param>
         /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-        /// <param name="noRmwUpdate"></param>
+        /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
         /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
         /// <returns>Session instance</returns>
         public ClientSession<Key, Value, Input, Output, Context, IFunctions<Key, Value, Input, Output, Context>> NewSession<Input, Output, Context>(IFunctions<Key, Value, Input, Output, Context> functions, string sessionId = null, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
@@ -150,7 +150,7 @@ namespace FASTER.core
         /// <param name="functions">Callback functions</param>
         /// <param name="sessionId">ID/name of session (auto-generated if not provided)</param>
         /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-        /// <param name="noRmwUpdate"></param>
+        /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
         /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
         /// <returns>Session instance</returns>
         public ClientSession<Key, Value, Input, Output, Context, Functions> NewSession<Input, Output, Context, Functions>(Functions functions, string sessionId = null, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
@@ -190,7 +190,7 @@ namespace FASTER.core
         /// <param name="sessionId">ID/name of previous session to resume</param>
         /// <param name="commitPoint">Prior commit point of durability for session</param>
         /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-        /// <param name="noRmwUpdate"></param>
+        /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
         /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
         /// <returns>Session instance</returns>
         public ClientSession<Key, Value, Input, Output, Context, IFunctions<Key, Value, Input, Output, Context>> ResumeSession<Input, Output, Context>(IFunctions<Key, Value, Input, Output, Context> functions, string sessionId, out CommitPoint commitPoint, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
@@ -206,7 +206,7 @@ namespace FASTER.core
         /// <param name="sessionId">ID/name of previous session to resume</param>
         /// <param name="commitPoint">Prior commit point of durability for session</param>
         /// <param name="threadAffinitized">For advanced users. Specifies whether session holds the thread epoch across calls. Do not use with async code. Ensure thread calls session Refresh periodically to move the system epoch forward.</param>
-        /// <param name="noRmwUpdate"></param>
+        /// <param name="noRmwUpdate">If <see langword="true"/>, disables update of existing records on RMW operation. <see cref="IFunctions{Key,Value,Input,Output,Context}.InitialUpdater"/> is still called for populating new records. For cases were overwriting is undesirable.</param>
         /// <param name="variableLengthStruct">Implementation of input-specific length computation for variable-length structs</param>
         /// <returns>Session instance</returns>
         public ClientSession<Key, Value, Input, Output, Context, Functions> ResumeSession<Input, Output, Context, Functions>(Functions functions, string sessionId, out CommitPoint commitPoint, bool threadAffinitized = false, bool noRmwUpdate = false, IVariableLengthStruct<Value, Input> variableLengthStruct = null)
